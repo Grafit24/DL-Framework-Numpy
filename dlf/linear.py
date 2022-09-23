@@ -1,5 +1,5 @@
 import numpy as np
-from base import Module
+from dlf.base import Module
 
 class Linear(Module):
     """Classic linear layer - y=wx+b."""

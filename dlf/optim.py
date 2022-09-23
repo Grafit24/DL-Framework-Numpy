@@ -1,5 +1,5 @@
 import numpy as np
-from base import Optimizer
+from dlf.base import Optimizer
 
 
 class SGD(Optimizer):

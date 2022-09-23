@@ -1,5 +1,5 @@
 import numpy as np
-from base import Criterion
+from dlf.base import Criterion
 
 
 class MSE(Criterion):
