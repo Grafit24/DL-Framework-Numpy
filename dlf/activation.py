@@ -3,9 +3,6 @@ from dlf.base import Module
 
 
 class ReLU(Module):
-    def __init__(self):
-         super().__init__()
-    
     def forward(self, input):
         self.output = np.maximum(input, 0)
         return self.output
@@ -16,7 +13,7 @@ class ReLU(Module):
 
 
 class LeakyReLU(Module):
-    def __init__(self, slope=0.03):
+    def __init__(self, slope=0.01):
         super().__init__()
         self.slope = slope
         
@@ -30,9 +27,6 @@ class LeakyReLU(Module):
 
 
 class Sigmoid(Module):
-    def __init__(self):
-        super().__init__()
-
     def forward(self, input):
         self.output = self.__class__._sigmoid(input)
         return self.output
@@ -47,17 +41,25 @@ class Sigmoid(Module):
         return 1/(1 + np.exp(-x))
 
 
-class SoftMax(Module):
-    def __init__(self):
-         super().__init__()
+class Tanh(Module):
+    def forward(self, input):
+        self.output = np.tanh(input)
+        return self.output
     
+    def backward(self, input, grad_output):
+        th = np.tanh(input)
+        grad_input = np.multiply(grad_output, (1 - th*th))
+        return grad_input
+
+
+class Softmax(Module):
     def forward(self, input):
         self.output = self._softmax(input)
         return self.output
     
     def backward(self, input, grad_output):
         p = self._softmax(input)
-        grad_input = p * (grad_output - (grad_output * p).sum(axis=1)[:, None])
+        grad_input = p * ( grad_output - (grad_output * p).sum(axis=1)[:, None] )
         return grad_input
 
     def _softmax(self, x):
@@ -65,3 +67,15 @@ class SoftMax(Module):
         e_m = np.exp(x)
         sum_e = np.repeat(np.sum(e_m, axis=1), x.shape[-1]).reshape(*e_m.shape)
         return e_m/sum_e
+
+
+class LogSoftmax(Softmax):
+    def forward(self, input):
+        # чтобы нигде не было взятий логарифма от нуля:
+        eps = 1e-9
+        softmax_clamp = np.clip(self._softmax(input), eps, 1 - eps)
+        self.output = np.log(softmax_clamp)
+        return self.output
+
+    def backward(self, input, grad_output):
+        return (1/self._softmax(input)) * super().backward(input, grad_output)
