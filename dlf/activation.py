@@ -32,7 +32,7 @@ class Sigmoid(Module):
         return self.output
     
     def backward(self, input, grad_output):
-        sigma = self.__class__._sigmoid(input)
+        sigma = self.output
         grad_input = np.multiply(grad_output, sigma*(1 - sigma))
         return grad_input
 
@@ -47,18 +47,18 @@ class Tanh(Module):
         return self.output
     
     def backward(self, input, grad_output):
-        th = np.tanh(input)
+        th = self.output
         grad_input = np.multiply(grad_output, (1 - th*th))
         return grad_input
 
 
 class Softmax(Module):
     def forward(self, input):
-        self.output = self._softmax(input)
+        self.output = self.softmax = self._softmax(input)
         return self.output
     
     def backward(self, input, grad_output):
-        p = self._softmax(input)
+        p = self.softmax
         grad_input = p * ( grad_output - (grad_output * p).sum(axis=1)[:, None] )
         return grad_input
 
@@ -73,12 +73,13 @@ class LogSoftmax(Softmax):
     def forward(self, input):
         # чтобы нигде не было взятий логарифма от нуля:
         eps = 1e-9
-        softmax_clamp = np.clip(self._softmax(input), eps, 1 - eps)
+        self.softmax = self._softmax(input)
+        softmax_clamp = np.clip(self.softmax, eps, 1 - eps)
         self.output = np.log(softmax_clamp)
         return self.output
 
     def backward(self, input, grad_output):
         eps = 1e-9
-        softmax_clamp = np.clip(self._softmax(input), eps, 1 - eps)
+        softmax_clamp = np.clip(self.softmax, eps, 1 - eps)
         grad_input = super().backward(input, grad_output * 1/softmax_clamp)
         return grad_input
