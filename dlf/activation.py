@@ -78,4 +78,7 @@ class LogSoftmax(Softmax):
         return self.output
 
     def backward(self, input, grad_output):
-        return (1/self._softmax(input)) * super().backward(input, grad_output)
+        eps = 1e-9
+        softmax_clamp = np.clip(self._softmax(input), eps, 1 - eps)
+        grad_input = super().backward(input, grad_output * 1/softmax_clamp)
+        return grad_input
