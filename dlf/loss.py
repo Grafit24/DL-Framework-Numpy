@@ -34,17 +34,16 @@ class CrossEntropy(Criterion, Softmax):
     """
     def forward(self, input, target): 
         batch_size = input.shape[0]
-        prob = self._softmax(input)
+        self.prob = self._softmax(input)
         # чтобы нигде не было взятий логарифма от нуля:
         eps = 1e-9
-        prob_clamp = np.clip(prob, eps, 1 - eps)
+        prob_clamp = np.clip(self.prob, eps, 1 - eps)
         self.output = np.sum(-np.log(prob_clamp) * target) / batch_size
         return self.output
 
     def backward(self, input, target):
         batch_size = input.shape[0]
-        prob = self._softmax(input)
         eps = 1e-9
-        prob_clamp = np.clip(prob, eps, 1 - eps)
+        prob_clamp = np.clip(self.prob, eps, 1 - eps)
         self.grad_output = (prob_clamp - target) / batch_size
         return self.grad_output
