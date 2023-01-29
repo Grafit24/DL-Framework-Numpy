@@ -1,3 +1,10 @@
+# Оптимизаторы
+- [SGD](#gradient-descent)
+- [Momentum](#momentum)
+- [RMSprop](#rmsprop)
+- [Adam](#adam)
+- [NAdam](#nadam)
+
 ## Gradient Descent
 [Источник](https://ruder.io/optimizing-gradient-descent/)
 ### SGD mini-batch
@@ -63,7 +70,7 @@ $$\large \theta_t = \theta_{t-1} - \frac{\eta}{\sqrt{\hat{u}_t} + \epsilon} \hat
 Если Momentum шар, то Adam это тяжёлый шар с сопротивлением, который будет предпочитать минимум на поверхности функции потерь.
 
 ---
-## Nadam
+## NAdam
 ### Описание
 Как Adam только, если Adam=Momentum+RMSprop, то Nadam=NAG+RMSprop.
 $$\theta_{t+1} = \theta_t − \frac{\eta}{\sqrt{\hat{u}_t}+\epsilon}  (\beta_1 \hat{m}_t +\frac{(1−\beta_1)g_t}{1−\beta_1^t})$$

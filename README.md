@@ -29,5 +29,5 @@ DL-Framework-Numpy
 - Momentum
 - RMSprop
 - Adam
-- Nadam
+- NAdam
 
