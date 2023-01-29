@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 
 class Module(ABC):
-    """Base class - every layer must implement him."""
+    """Base class - every layer must implement its."""
     def __init__(self):
         self._train = True
 

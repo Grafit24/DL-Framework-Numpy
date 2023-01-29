@@ -2,7 +2,7 @@ import numpy as np
 from dlf.base import Module
 
 class Linear(Module):
-    """Classic linear layer - y=wx+b."""
+    """Полносвязный линейный слой — y=wx+b."""
     def __init__(self, dim_in, dim_out, bias=True):
         super().__init__()
         self._bias = bias

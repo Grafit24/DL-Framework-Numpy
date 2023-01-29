@@ -25,7 +25,7 @@ class Momentum(Optimizer):
             weights -= self._u[i]
 
 
-class RMSProp(Optimizer):
+class RMSprop(Optimizer):
     def __init__(self, lr=1e-3, eps=1e-8, beta=.9):
         self.lr = lr
         self.eps = eps
@@ -66,7 +66,7 @@ class Adam(Optimizer):
         self.t = 1
 
 
-class Nadam(Optimizer):
+class NAdam(Optimizer):
     def __init__(self, lr=1e-3, beta1=.9, beta2=.999, eps=1e-8):
         self.lr = lr
         self.beta1 = beta1

@@ -29,13 +29,13 @@ class NLL(Criterion):
         return self.grad_output
 
 class CrossEntropy(Criterion, Softmax):
-    """Тоже самое, что и Sofrmax + NLL только быстрее. 
-    Соответсвенно принимает не распределение вероятностей, a логиты (выход Linear).
+    """The same as Sofrmax + NLL but faster. 
+    Accordingly it doesn't accept probability distributions, but logits (output of Linear).
     """
     def forward(self, input, target): 
         batch_size = input.shape[0]
         self.prob = self._softmax(input)
-        # чтобы нигде не было взятий логарифма от нуля:
+        # for no taking log from zero
         eps = 1e-9
         prob_clamp = np.clip(self.prob, eps, 1 - eps)
         self.output = np.sum(-np.log(prob_clamp) * target) / batch_size
